@@ -92,6 +92,15 @@ def visual(stock_df,stock_symbol,short_window,long_window):
     return fig
 
 # Set the app title and the app icon
+# Create a blue rectangle using HTML inside Markdown
+st.markdown(
+        """
+        <div style="background-color: blue; width: 100%; height: 25px; display: flex; align-items: center; justify-content: center;">
+            <span style="color: black; font-weight: bold;"></span>
+        </div>
+        """,
+        unsafe_allow_html=True)
+
 st.title("Strategy Helper for stock analysis.")
 
 # intention of tool
@@ -104,7 +113,7 @@ st.write(
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
         """
-        <div style="background-color: blue; width: 100%; height: 50px; display: flex; align-items: center; justify-content: center;">
+        <div style="background-color: blue; width: 100%; height: 25px; display: flex; align-items: center; justify-content: center;">
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
@@ -163,6 +172,15 @@ else:
     df['Close'] = df['Close'].clip(1000, 2000)  # Ensure values remain within [1000, 2000] range
     data =  df
 
+    # Create a blue rectangle using HTML inside Markdown
+    st.markdown(
+            """
+            <div style="background-color: blue; width: 100%; height: 25px; display: flex; align-items: center; justify-content: center;">
+                <span style="color: black; font-weight: bold;"></span>
+            </div>
+            """,
+            unsafe_allow_html=True)
+
     # message
     st.write("No data uploaded. Using sample data instead.")
     
@@ -190,7 +208,6 @@ else:
     with col2:
         st.write("Closing value summary:")
         st.dataframe(df_description)
-    st.write(data)
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
