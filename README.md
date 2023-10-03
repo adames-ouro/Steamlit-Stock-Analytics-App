@@ -53,9 +53,5 @@ This application is designed to assist users in analyzing stock data. Using Stre
 
 - Data visualization powered by [Plotly](https://plotly.com/).
 - Built with [Streamlit](https://www.streamlit.io/).
-- Data transformations are power by [Pandas] (https://pandas.pydata.org/). An open-source data analysis and manipulation tool.
-
----
-
-**Note**: Ensure to replace placeholders like `your-github-username` and `your_app_file_name.py` with actual values specific to your project.
+- Data transformations are power by [Pandas](https://pandas.pydata.org/).
 
