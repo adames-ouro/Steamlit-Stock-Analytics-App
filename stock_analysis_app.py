@@ -99,7 +99,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=True)
+        unsafe_allow_html=False)
 
 st.title("Strategy Helper for stock analysis.")
 
@@ -117,7 +117,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=True)
+        unsafe_allow_html=False)
 
 # Upload dataset
 st.subheader('Please upload stock data.')
@@ -136,7 +136,9 @@ if uploaded_file:
 
 # generates random data
 else:
+    data = pd.DataFrame(None)
     st.write("No data uploaded.")
+    st.session_state.dataframe = data
     
 
 # Create a blue rectangle using HTML inside Markdown
@@ -146,7 +148,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=True)
+        unsafe_allow_html=False)
 
 # message
 
@@ -160,7 +162,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=True)
+        unsafe_allow_html=False)
 
 st.subheader('Please Describe your stock data.')
 
@@ -179,12 +181,9 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=True)
+        unsafe_allow_html=False)
 
 # Display a button that when clicked will "navigate" to visuals
-
-st.session_state.dataframe = data
-
 
 st.title('Visuals of stock data.')
 
@@ -195,7 +194,7 @@ if st.checkbox('Explanation'):
     <p><strong>Exponential Moving Average (EMA)</strong></p>
     <p>The EMA is computed as:</p>
     """,
-        unsafe_allow_html=True)
+        unsafe_allow_html=False)
 
     # Render LaTeX content
     st.latex(r"\text{EMA}_t = (C_t \times \alpha) + (\text{EMA}_{t-1} \times (1-\alpha))")
@@ -204,7 +203,7 @@ if st.checkbox('Explanation'):
     st.markdown("""
     <p>Where:</p>
     """,
-        unsafe_allow_html=True)
+        unsafe_allow_html=False)
 
     # LaTeX with simple text
     st.latex(r"""
@@ -230,7 +229,7 @@ if st.checkbox('Explanation'):
     st.markdown("""
     <p>Here, N is the number of days in the moving average period.</p>
     """,
-        unsafe_allow_html=True)
+        unsafe_allow_html=False)
 
     st.title("Benefits of Using Long and Short Time Window with EMA")
 
