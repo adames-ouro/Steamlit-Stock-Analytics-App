@@ -131,11 +131,13 @@ st.write(
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
-    st.write("Closing value summary:")
-    st.dataframe(data.describe())
+    st.write("Got the uploaded cvs!")
+    st.session_state.dataframe = data
 
 # generates random data
 else:
+    st.write("No data uploaded. Using sample data instead.")
+    
     # Setting the date range
     date_rng = pd.date_range(start='2020-01-01', end=pd.Timestamp.today(), freq='D')
 
@@ -147,20 +149,21 @@ else:
     # Creating the DataFrame
     data = pd.DataFrame(data={'Date': date_rng, 'Close': close_values})
     data['Close'] = data['Close'].clip(1000, 2000)  # Ensure values remain within [1000, 2000] range
+    st.session_state.dataframe = data
 
-    # Create a blue rectangle using HTML inside Markdown
-    st.markdown(
-            """
-            <div style="background-color: blue; width: 100%; height: 25px; display: flex; align-items: center; justify-content: center;">
-                <span style="color: black; font-weight: bold;"></span>
-            </div>
-            """,
-            unsafe_allow_html=True)
+# Create a blue rectangle using HTML inside Markdown
+st.markdown(
+        """
+        <div style="background-color: blue; width: 100%; height: 25px; display: flex; align-items: center; justify-content: center;">
+            <span style="color: black; font-weight: bold;"></span>
+        </div>
+        """,
+        unsafe_allow_html=True)
 
-    # message
-    st.write("No data uploaded. Using sample data instead.")
-    st.write("Closing value summary:")
-    st.dataframe(data.describe())
+# message
+
+st.write("Closing value summary:")
+st.dataframe(st.session_state.dataframe.describe())
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
@@ -276,12 +279,12 @@ else:
                 )
     
     if len(data) != 0:
-        stock_df = Exponential_Moving_Average(stock_df = data,
+        stock_df = Exponential_Moving_Average(stock_df = st.session_state.dataframe,
                                                 short_window = st.session_state.short_window,
                                                 long_window = st.session_state.long_window)
 
         st.plotly_chart(
-            visual(stock_df = data,
+            visual(stock_df = st.session_state.dataframe,
                     stock_symbol = str(st.session_state.stock_symbol),
                     short_window = st.session_state.short_window,
                     long_window = st.session_state.long_window),
