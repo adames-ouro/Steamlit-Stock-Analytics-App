@@ -4,7 +4,6 @@ import numpy as np
 import warnings
 import plotly.graph_objects as go
 import streamlit as st
-
 warnings.simplefilter(action='ignore', category=[FutureWarning,ValueError])
 
 
@@ -92,15 +91,6 @@ def visual(stock_df,stock_symbol,short_window,long_window):
     return fig
 
 # Set the app title and the app icon
-# Create a blue rectangle using HTML inside Markdown
-st.markdown(
-        """
-        <div style="background-color: blue; width: 100%; height: 25px; display: flex; align-items: center; justify-content: center;">
-            <span style="color: black; font-weight: bold;"></span>
-        </div>
-        """,
-        unsafe_allow_html=True)
-
 st.title("Strategy Helper for stock analysis.")
 
 # intention of tool
@@ -113,7 +103,7 @@ st.write(
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
         """
-        <div style="background-color: blue; width: 100%; height: 25px; display: flex; align-items: center; justify-content: center;">
+        <div style="background-color: blue; width: 100%; height: 50px; display: flex; align-items: center; justify-content: center;">
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
@@ -131,27 +121,47 @@ st.write(
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
-    st.write("Got the uploaded cvs!")
-    st.session_state.dataframe = data
-
-# generates random data
-else:
-    data = pd.DataFrame({'Date': pd.Timestamp.now().date(),'Close':0.0})
-    st.write("No data uploaded.")
-    st.session_state.dataframe = data
     
+    # Earliest and Latest date
+    date_df = pd.DataFrame({'Key info': [data['Date'].min(),
+                                     data['Date'].max(),
+                                    (data[data['Close'] == data['Close'].min()]['Date'].iloc[0],data[data['Close'] == data['Close'].min()]['Close'].iloc[0]),
+                                    (data[data['Close'] == data['Close'].max()]['Date'].iloc[0],data[data['Close'] == data['Close'].max()]['Close'].iloc[0])]},
+                            index = ['Earliest date in uploaded data', 
+                                    'Latest date in uploaded data',
+                                    "Date with lower close value",
+                                    "Date with highest close value"])
 
-# Create a blue rectangle using HTML inside Markdown
-st.markdown(
-        """
-        <div style="background-color: blue; width: 100%; height: 25px; display: flex; align-items: center; justify-content: center;">
-            <span style="color: black; font-weight: bold;"></span>
-        </div>
-        """,
-        unsafe_allow_html=True)
+    df_description = data.describe()
 
+    # Split the app layout into 2 columns w space in between
+    col1, space, col2 = st.columns([1, 0.1, 1])
 
-st.subheader('Please Describe your stock data.')
+    # Display date_df in the first column and df_description in the second column
+    
+    with col1:
+        st.write("Date related descriptions:")
+        st.dataframe(date_df)
+
+    with col2:
+        st.write("Closing value summary:")
+        st.dataframe(df_description)
+
+else:
+    # Setting the date range
+    date_rng = pd.date_range(start='2020-01-01', end=pd.Timestamp.today(), freq='D')
+
+    # Generating noisy, incremental Close values
+    noise = np.random.normal(0, 5, len(date_rng))  # Gaussian noise with mean=0 and standard deviation=5
+    incremental_values = np.linspace(1000, 2000, len(date_rng))
+    close_values = incremental_values + noise
+
+    # Creating the DataFrame
+    df = pd.DataFrame(data={'Date': date_rng, 'Close': close_values})
+    df['Close'] = df['Close'].clip(1000, 2000)  # Ensure values remain within [1000, 2000] range
+    data =  df
+    st.write("No data uploaded. Using sample data instead.")
+    st.write(data)
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
@@ -162,6 +172,7 @@ st.markdown(
         """,
         unsafe_allow_html=True)
 
+st.subheader('Please Describe your stock data.')
 
 # user inputs
 st.session_state.stock_symbol = st.text_input("Enter specific stock symbol. For example, Apple stock symbol is APPL.",
@@ -181,6 +192,9 @@ st.markdown(
         unsafe_allow_html=True)
 
 # Display a button that when clicked will "navigate" to visuals
+
+st.session_state.dataframe = data
+
 
 st.title('Visuals of stock data.')
 
