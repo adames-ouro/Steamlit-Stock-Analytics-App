@@ -136,7 +136,7 @@ if uploaded_file:
 
 # generates random data
 else:
-    data = pd.DataFrame(None)
+    data = pd.DataFrame({'Date': pd.Timestamp.now().date(),'Close':0.0})
     st.write("No data uploaded.")
     st.session_state.dataframe = data
     
