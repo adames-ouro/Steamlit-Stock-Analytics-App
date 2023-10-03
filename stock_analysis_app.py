@@ -99,7 +99,7 @@ st.write(
     """
     This Streamlit application is designed to help users analyze stock data by visualizing Exponential Moving Averages (EMA) and identifying potential Buy/Sell signals based on the crossover of short and long-term EMA.
     """
-    )
+        )
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
@@ -117,20 +117,15 @@ st.write(
     """
     Data must be in CSV format and contain the following columns: Date, Close.
     """
-    )
+        )
 
-# Initialize session state if not present
-if 'df' not in st.session_state:
-    st.session_state.df = None
-
+if 'dataframe' not in st.session_state:
+     st.session_state.dataframe = pd.DataFrame()
+     
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
-    st.session_state.df = data
-    st.write("CSV uploaded.")
-
-
-if st.session_state.df not None:
+    st.session_state.dataframe = data
     # Earliest and Latest date
     date_df = pd.DataFrame({'Key info': [data['Date'].min(),
                                         data['Date'].max(),
@@ -140,21 +135,22 @@ if st.session_state.df not None:
                                     'Latest date in uploaded data',
                                     "Date with lower close value",
                                     "Date with highest close value"])
-    
+
     df_description = data.describe()
-    
+
     # Split the app layout into 2 columns w space in between
     col1, space, col2 = st.columns([1, 0.1, 1])
-    
+
     # Display date_df in the first column and df_description in the second column
-    
+
     with col1:
         st.write("Date related descriptions:")
         st.dataframe(date_df)
-    
+
     with col2:
         st.write("Closing value summary:")
         st.dataframe(df_description)
+
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
@@ -184,7 +180,7 @@ st.markdown(
         """,
         unsafe_allow_html=True)
 
-# visual
+# Create a button to run the visual/explanation
 st.title('Visuals of stock data.')
 
 if st.checkbox('Explanation'):
@@ -262,23 +258,22 @@ if st.checkbox('Explanation'):
 
 else:
     st.subheader(str(st.session_state.stock_symbol) + 
-                    ' Exponential Moving Average Analysis')
-        
-    if st.session_state.df != None:
-
-        if len(data) != 0:
-            stock_df = Exponential_Moving_Average(stock_df = st.session_state.df,
-                                                    short_window = st.session_state.short_window,
-                                                    long_window = st.session_state.long_window)
-    
-            st.plotly_chart(
-                visual(stock_df = st.session_state.df,
-                        stock_symbol = str(st.session_state.stock_symbol),
-                        short_window = st.session_state.short_window,
-                        long_window = st.session_state.long_window),
-    
-                use_container_width=True,
-                theme = None
+                ' Exponential Moving Average Analysis'
                 )
-        else:
-            st.write('Select data to visualize.')
+    
+    if len(st.session_state.dataframe) != 0:
+        stock_df = Exponential_Moving_Average(stock_df = st.session_state.dataframe,
+                                                short_window = st.session_state.short_window,
+                                                long_window = st.session_state.long_window)
+
+        st.plotly_chart(
+            visual(stock_df = st.session_state.dataframe,
+                    stock_symbol = str(st.session_state.stock_symbol),
+                    short_window = st.session_state.short_window,
+                    long_window = st.session_state.long_window),
+
+            use_container_width=True,
+            theme = None
+            )
+    else:
+        st.write('Select data to visualize.')
