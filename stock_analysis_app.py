@@ -191,10 +191,6 @@ st.markdown(
         """,
         unsafe_allow_html=True)
 
-# Display a button that when clicked will "navigate" to visuals
-
-st.session_state.dataframe = data
-
 
 st.title('Visuals of stock data.')
 
@@ -277,12 +273,12 @@ else:
                 )
     
     if len(data) != 0:
-        stock_df = Exponential_Moving_Average(stock_df = st.session_state.dataframe,
+        stock_df = Exponential_Moving_Average(stock_df = data,
                                                 short_window = st.session_state.short_window,
                                                 long_window = st.session_state.long_window)
 
         st.plotly_chart(
-            visual(stock_df = st.session_state.dataframe,
+            visual(stock_df = data,
                     stock_symbol = str(st.session_state.stock_symbol),
                     short_window = st.session_state.short_window,
                     long_window = st.session_state.long_window),
