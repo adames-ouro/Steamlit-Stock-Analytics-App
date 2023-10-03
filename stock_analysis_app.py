@@ -136,20 +136,8 @@ if uploaded_file:
 
 # generates random data
 else:
-    st.write("No data uploaded. Using sample data instead.")
+    st.write("No data uploaded.")
     
-    # Setting the date range
-    date_rng = pd.date_range(start='2020-01-01', end=pd.Timestamp.today(), freq='D')
-
-    # Generating noisy, incremental Close values
-    noise = np.random.normal(0, 5, len(date_rng))  # Gaussian noise with mean=0 and standard deviation=5
-    incremental_values = np.linspace(1000, 2000, len(date_rng))
-    close_values = incremental_values + noise
-
-    # Creating the DataFrame
-    data = pd.DataFrame(data={'Date': date_rng, 'Close': close_values})
-    data['Close'] = data['Close'].clip(1000, 2000)  # Ensure values remain within [1000, 2000] range
-    st.session_state.dataframe = data
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
