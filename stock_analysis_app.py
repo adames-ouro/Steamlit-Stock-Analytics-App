@@ -281,7 +281,7 @@ else:
                                                 long_window = st.session_state.long_window)
 
         st.plotly_chart(
-            visual(stock_df = st.session_state.dataframe,
+            visual(stock_df = data,
                     stock_symbol = str(st.session_state.stock_symbol),
                     short_window = st.session_state.short_window,
                     long_window = st.session_state.long_window),
