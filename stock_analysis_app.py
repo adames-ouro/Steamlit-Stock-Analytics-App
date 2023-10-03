@@ -276,7 +276,7 @@ else:
                 )
     
     if len(data) != 0:
-        stock_df = Exponential_Moving_Average(stock_df = st.session_state.dataframe,
+        stock_df = Exponential_Moving_Average(stock_df = data,
                                                 short_window = st.session_state.short_window,
                                                 long_window = st.session_state.long_window)
 
