@@ -1,6 +1,7 @@
 # Strategy Helper for Stock Analysis
 
-[EMA visual example](Stock-Analytics-App/EMA visual example.png)
+![My Image](./EMA visual example.png)
+
 
 ## Table of Contents
 - [Overview](#overview)
