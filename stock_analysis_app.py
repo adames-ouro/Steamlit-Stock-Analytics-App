@@ -99,7 +99,7 @@ st.write(
     """
     This Streamlit application is designed to help users analyze stock data by visualizing Exponential Moving Averages (EMA) and identifying potential Buy/Sell signals based on the crossover of short and long-term EMA.
     """
-        )
+    )
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
@@ -117,11 +117,11 @@ st.write(
     """
     Data must be in CSV format and contain the following columns: Date, Close.
     """
-        )
+    )
 
 # Initialize session state if not present
 if 'df' not in st.session_state:
-    st.session_state.df = ''
+    st.session_state.df = None
 
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file:
@@ -129,34 +129,32 @@ if uploaded_file:
     st.session_state.df = data
     st.write("CSV uploaded.")
 
-else:
-    st.session_state.df = data
-    st.write("No data uploaded.")
 
-# Earliest and Latest date
-date_df = pd.DataFrame({'Key info': [data['Date'].min(),
-                                    data['Date'].max(),
-                                (data[data['Close'] == data['Close'].min()]['Date'].iloc[0],data[data['Close'] == data['Close'].min()]['Close'].iloc[0]),
-                                (data[data['Close'] == data['Close'].max()]['Date'].iloc[0],data[data['Close'] == data['Close'].max()]['Close'].iloc[0])]},
-                        index = ['Earliest date in uploaded data', 
-                                'Latest date in uploaded data',
-                                "Date with lower close value",
-                                "Date with highest close value"])
-
-df_description = data.describe()
-
-# Split the app layout into 2 columns w space in between
-col1, space, col2 = st.columns([1, 0.1, 1])
-
-# Display date_df in the first column and df_description in the second column
-
-with col1:
-    st.write("Date related descriptions:")
-    st.dataframe(date_df)
-
-with col2:
-    st.write("Closing value summary:")
-    st.dataframe(df_description)
+if st.session_state.df not None:
+    # Earliest and Latest date
+    date_df = pd.DataFrame({'Key info': [data['Date'].min(),
+                                        data['Date'].max(),
+                                    (data[data['Close'] == data['Close'].min()]['Date'].iloc[0],data[data['Close'] == data['Close'].min()]['Close'].iloc[0]),
+                                    (data[data['Close'] == data['Close'].max()]['Date'].iloc[0],data[data['Close'] == data['Close'].max()]['Close'].iloc[0])]},
+                            index = ['Earliest date in uploaded data', 
+                                    'Latest date in uploaded data',
+                                    "Date with lower close value",
+                                    "Date with highest close value"])
+    
+    df_description = data.describe()
+    
+    # Split the app layout into 2 columns w space in between
+    col1, space, col2 = st.columns([1, 0.1, 1])
+    
+    # Display date_df in the first column and df_description in the second column
+    
+    with col1:
+        st.write("Date related descriptions:")
+        st.dataframe(date_df)
+    
+    with col2:
+        st.write("Closing value summary:")
+        st.dataframe(df_description)
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
@@ -263,11 +261,11 @@ if st.checkbox('Explanation'):
 
 
 else:
-    if st.session_state.df != '':
-        st.subheader(str(st.session_state.stock_symbol) + 
-                    ' Exponential Moving Average Analysis'
-                    )
+    st.subheader(str(st.session_state.stock_symbol) + 
+                    ' Exponential Moving Average Analysis')
         
+    if st.session_state.df != None:
+
         if len(data) != 0:
             stock_df = Exponential_Moving_Average(stock_df = st.session_state.df,
                                                     short_window = st.session_state.short_window,
