@@ -1,6 +1,6 @@
 # Strategy Helper for Stock Analysis
 
-![My Image](./EMA_vis.png)
+[EMA_vis](./EMA_vis.png)
 
 
 ## Table of Contents
