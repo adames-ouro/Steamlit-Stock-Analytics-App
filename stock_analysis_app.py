@@ -4,8 +4,9 @@ import numpy as np
 import warnings
 import plotly.graph_objects as go
 import streamlit as st
-warnings.simplefilter(action='ignore', category=[FutureWarning,ValueError])
+import requests
 
+warnings.simplefilter(action='ignore', category=[FutureWarning,ValueError])
 
 def Exponential_Moving_Average(stock_df, short_window,long_window):
     # column names for long and short moving average columns
@@ -121,36 +122,43 @@ st.write(
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
-    
-    # Earliest and Latest date
-    date_df = pd.DataFrame({'Key info': [data['Date'].min(),
-                                     data['Date'].max(),
-                                    (data[data['Close'] == data['Close'].min()]['Date'].iloc[0],data[data['Close'] == data['Close'].min()]['Close'].iloc[0]),
-                                    (data[data['Close'] == data['Close'].max()]['Date'].iloc[0],data[data['Close'] == data['Close'].max()]['Close'].iloc[0])]},
-                            index = ['Earliest date in uploaded data', 
-                                    'Latest date in uploaded data',
-                                    "Date with lower close value",
-                                    "Date with highest close value"])
-
-    df_description = data.describe()
-
-    # Split the app layout into 2 columns w space in between
-    col1, space, col2 = st.columns([1, 0.1, 1])
-
-    # Display date_df in the first column and df_description in the second column
-    
-    with col1:
-        st.write("Date related descriptions:")
-        st.dataframe(date_df)
-
-    with col2:
-        st.write("Closing value summary:")
-        st.dataframe(df_description)
+    st.write("CSV uploaded.")
 
 else:
-    # Setting 
     st.write("No data uploaded. Using sample data instead.")
 
+    # The raw GitHub URL of your CSV
+    url = 'https://github.com/adames-ouro/Stock-Analytics-App/blob/main/stock_data.csv'
+    response = requests.get(url)
+    df = response.json()
+    data = pd.DataFrame(df['payload']['blob']['csv'], columns=['Date','Close'])
+    data = data.iloc[1:,:].reset_index(drop=True)
+    data['Close'] = data['Close'].astype(float)
+
+# Earliest and Latest date
+date_df = pd.DataFrame({'Key info': [data['Date'].min(),
+                                    data['Date'].max(),
+                                (data[data['Close'] == data['Close'].min()]['Date'].iloc[0],data[data['Close'] == data['Close'].min()]['Close'].iloc[0]),
+                                (data[data['Close'] == data['Close'].max()]['Date'].iloc[0],data[data['Close'] == data['Close'].max()]['Close'].iloc[0])]},
+                        index = ['Earliest date in uploaded data', 
+                                'Latest date in uploaded data',
+                                "Date with lower close value",
+                                "Date with highest close value"])
+
+df_description = data.describe()
+
+# Split the app layout into 2 columns w space in between
+col1, space, col2 = st.columns([1, 0.1, 1])
+
+# Display date_df in the first column and df_description in the second column
+
+with col1:
+    st.write("Date related descriptions:")
+    st.dataframe(date_df)
+
+with col2:
+    st.write("Closing value summary:")
+    st.dataframe(df_description)
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
@@ -179,6 +187,10 @@ st.markdown(
         </div>
         """,
         unsafe_allow_html=True)
+
+# Display a button that when clicked will "navigate" to visuals
+
+st.session_state.dataframe = data
 
 
 st.title('Visuals of stock data.')
@@ -262,12 +274,12 @@ else:
                 )
     
     if len(data) != 0:
-        stock_df = Exponential_Moving_Average(stock_df = data,
+        stock_df = Exponential_Moving_Average(stock_df = st.session_state.dataframe,
                                                 short_window = st.session_state.short_window,
                                                 long_window = st.session_state.long_window)
 
         st.plotly_chart(
-            visual(stock_df = data,
+            visual(stock_df = st.session_state.dataframe,
                     stock_symbol = str(st.session_state.stock_symbol),
                     short_window = st.session_state.short_window,
                     long_window = st.session_state.long_window),
