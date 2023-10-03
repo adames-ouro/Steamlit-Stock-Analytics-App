@@ -150,10 +150,8 @@ st.markdown(
         """,
         unsafe_allow_html=True)
 
-# message
 
-st.write("Closing value summary:")
-st.dataframe(st.session_state.dataframe.describe())
+st.subheader('Please Describe your stock data.')
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
@@ -164,7 +162,6 @@ st.markdown(
         """,
         unsafe_allow_html=True)
 
-st.subheader('Please Describe your stock data.')
 
 # user inputs
 st.session_state.stock_symbol = st.text_input("Enter specific stock symbol. For example, Apple stock symbol is APPL.",
