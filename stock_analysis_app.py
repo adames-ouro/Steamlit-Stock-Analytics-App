@@ -148,9 +148,48 @@ if uploaded_file:
         st.write("Closing value summary:")
         st.dataframe(df_description)
 
+# generates random data
 else:
-    data =  pd.DataFrame(None)
-    st.write("No data uploaded.")
+    # Setting the date range
+    date_rng = pd.date_range(start='2020-01-01', end=pd.Timestamp.today(), freq='D')
+
+    # Generating noisy, incremental Close values
+    noise = np.random.normal(0, 5, len(date_rng))  # Gaussian noise with mean=0 and standard deviation=5
+    incremental_values = np.linspace(1000, 2000, len(date_rng))
+    close_values = incremental_values + noise
+
+    # Creating the DataFrame
+    df = pd.DataFrame(data={'Date': date_rng, 'Close': close_values})
+    df['Close'] = df['Close'].clip(1000, 2000)  # Ensure values remain within [1000, 2000] range
+    data =  df
+
+    # message
+    st.write("No data uploaded. Using sample data instead.")
+    
+    # Earliest and Latest date
+    date_df = pd.DataFrame({'Key info': [data['Date'].min(),
+                                     data['Date'].max(),
+                                    (data[data['Close'] == data['Close'].min()]['Date'].iloc[0],data[data['Close'] == data['Close'].min()]['Close'].iloc[0]),
+                                    (data[data['Close'] == data['Close'].max()]['Date'].iloc[0],data[data['Close'] == data['Close'].max()]['Close'].iloc[0])]},
+                            index = ['Earliest date in uploaded data', 
+                                    'Latest date in uploaded data',
+                                    "Date with lower close value",
+                                    "Date with highest close value"])
+
+    df_description = data.describe()
+
+    # Split the app layout into 2 columns w space in between
+    col1, space, col2 = st.columns([1, 0.1, 1])
+
+    # Display date_df in the first column and df_description in the second column
+    
+    with col1:
+        st.write("Date related descriptions:")
+        st.dataframe(date_df)
+
+    with col2:
+        st.write("Closing value summary:")
+        st.dataframe(df_description)
     st.write(data)
 
 # Create a blue rectangle using HTML inside Markdown
