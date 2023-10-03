@@ -131,31 +131,8 @@ st.write(
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
-    
-    # Earliest and Latest date
-    date_df = pd.DataFrame({'Key info': [data['Date'].min(),
-                                     data['Date'].max(),
-                                    (data[data['Close'] == data['Close'].min()]['Date'].iloc[0],data[data['Close'] == data['Close'].min()]['Close'].iloc[0]),
-                                    (data[data['Close'] == data['Close'].max()]['Date'].iloc[0],data[data['Close'] == data['Close'].max()]['Close'].iloc[0])]},
-                            index = ['Earliest date in uploaded data', 
-                                    'Latest date in uploaded data',
-                                    "Date with lower close value",
-                                    "Date with highest close value"])
-
-    df_description = data.describe()
-
-    # Split the app layout into 2 columns w space in between
-    col1, space, col2 = st.columns([1, 0.1, 1])
-
-    # Display date_df in the first column and df_description in the second column
-    
-    with col1:
-        st.write("Date related descriptions:")
-        st.dataframe(date_df)
-
-    with col2:
-        st.write("Closing value summary:")
-        st.dataframe(df_description)
+    st.write("Closing value summary:")
+    st.dataframe(data.describe())
 
 # generates random data
 else:
@@ -168,9 +145,8 @@ else:
     close_values = incremental_values + noise
 
     # Creating the DataFrame
-    df = pd.DataFrame(data={'Date': date_rng, 'Close': close_values})
-    df['Close'] = df['Close'].clip(1000, 2000)  # Ensure values remain within [1000, 2000] range
-    data =  df
+    data = pd.DataFrame(data={'Date': date_rng, 'Close': close_values})
+    data['Close'] = data['Close'].clip(1000, 2000)  # Ensure values remain within [1000, 2000] range
 
     # Create a blue rectangle using HTML inside Markdown
     st.markdown(
@@ -183,31 +159,8 @@ else:
 
     # message
     st.write("No data uploaded. Using sample data instead.")
-    
-    # Earliest and Latest date
-    date_df = pd.DataFrame({'Key info': [data['Date'].min(),
-                                     data['Date'].max(),
-                                    (data[data['Close'] == data['Close'].min()]['Date'].iloc[0],data[data['Close'] == data['Close'].min()]['Close'].iloc[0]),
-                                    (data[data['Close'] == data['Close'].max()]['Date'].iloc[0],data[data['Close'] == data['Close'].max()]['Close'].iloc[0])]},
-                            index = ['Earliest date in uploaded data', 
-                                    'Latest date in uploaded data',
-                                    "Date with lower close value",
-                                    "Date with highest close value"])
-
-    df_description = data.describe()
-
-    # Split the app layout into 2 columns w space in between
-    col1, space, col2 = st.columns([1, 0.1, 1])
-
-    # Display date_df in the first column and df_description in the second column
-    
-    with col1:
-        st.write("Date related descriptions:")
-        st.dataframe(date_df)
-
-    with col2:
-        st.write("Closing value summary:")
-        st.dataframe(df_description)
+    st.write("Closing value summary:")
+    st.dataframe(data.describe())
 
 # Create a blue rectangle using HTML inside Markdown
 st.markdown(
