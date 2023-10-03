@@ -166,7 +166,7 @@ st.subheader('Please Describe your stock data.')
 
 # user inputs
 st.session_state.stock_symbol = st.text_input("Enter specific stock symbol. For example, Apple stock symbol is APPL.",
-                                             "APPL")
+                                             "Stock")
 
 st.session_state.short_window = st.number_input("Enter number of consecutive days used for short-term analysis. Default is '7'.",7)
 
