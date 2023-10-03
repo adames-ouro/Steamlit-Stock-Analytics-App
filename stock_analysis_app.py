@@ -119,21 +119,19 @@ st.write(
     """
         )
 
+# Initialize session state if not present
+if 'df' not in st.session_state:
+    st.session_state.df = ''
+
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
+    st.session_state.df = data
     st.write("CSV uploaded.")
 
 else:
-    st.write("No data uploaded. Using sample data instead.")
-
-    # The raw GitHub URL of your CSV
-    url = 'https://github.com/adames-ouro/Stock-Analytics-App/blob/main/stock_data.csv'
-    response = requests.get(url)
-    df = response.json()
-    data = pd.DataFrame(df['payload']['blob']['csv'], columns=['Date','Close'])
-    data = data.iloc[1:,:].reset_index(drop=True)
-    data['Close'] = data['Close'].astype(float)
+    st.session_state.df = data
+    st.write("No data uploaded.")
 
 # Earliest and Latest date
 date_df = pd.DataFrame({'Key info': [data['Date'].min(),
@@ -269,23 +267,24 @@ if st.checkbox('Explanation'):
 
 
 else:
-    st.subheader(str(st.session_state.stock_symbol) + 
-                ' Exponential Moving Average Analysis'
-                )
+    if st.session_state.df != '':
+        st.subheader(str(st.session_state.stock_symbol) + 
+                    ' Exponential Moving Average Analysis'
+                    )
+        
+        if len(data) != 0:
+            stock_df = Exponential_Moving_Average(stock_df = st.session_state.dataframe,
+                                                    short_window = st.session_state.short_window,
+                                                    long_window = st.session_state.long_window)
     
-    if len(data) != 0:
-        stock_df = Exponential_Moving_Average(stock_df = st.session_state.dataframe,
-                                                short_window = st.session_state.short_window,
-                                                long_window = st.session_state.long_window)
-
-        st.plotly_chart(
-            visual(stock_df = st.session_state.dataframe,
-                    stock_symbol = str(st.session_state.stock_symbol),
-                    short_window = st.session_state.short_window,
-                    long_window = st.session_state.long_window),
-
-            use_container_width=True,
-            theme = None
-            )
-    else:
-        st.write('Select data to visualize.')
+            st.plotly_chart(
+                visual(stock_df = st.session_state.dataframe,
+                        stock_symbol = str(st.session_state.stock_symbol),
+                        short_window = st.session_state.short_window,
+                        long_window = st.session_state.long_window),
+    
+                use_container_width=True,
+                theme = None
+                )
+        else:
+            st.write('Select data to visualize.')
