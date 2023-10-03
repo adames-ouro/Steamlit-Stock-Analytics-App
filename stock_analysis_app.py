@@ -99,7 +99,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=False)
+        unsafe_allow_html=True)
 
 st.title("Strategy Helper for stock analysis.")
 
@@ -117,7 +117,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=False)
+        unsafe_allow_html=True)
 
 # Upload dataset
 st.subheader('Please upload stock data.')
@@ -148,7 +148,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=False)
+        unsafe_allow_html=True)
 
 # message
 
@@ -162,7 +162,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=False)
+        unsafe_allow_html=True)
 
 st.subheader('Please Describe your stock data.')
 
@@ -181,7 +181,7 @@ st.markdown(
             <span style="color: black; font-weight: bold;"></span>
         </div>
         """,
-        unsafe_allow_html=False)
+        unsafe_allow_html=True)
 
 # Display a button that when clicked will "navigate" to visuals
 
@@ -194,7 +194,7 @@ if st.checkbox('Explanation'):
     <p><strong>Exponential Moving Average (EMA)</strong></p>
     <p>The EMA is computed as:</p>
     """,
-        unsafe_allow_html=False)
+        unsafe_allow_html=True)
 
     # Render LaTeX content
     st.latex(r"\text{EMA}_t = (C_t \times \alpha) + (\text{EMA}_{t-1} \times (1-\alpha))")
@@ -203,7 +203,7 @@ if st.checkbox('Explanation'):
     st.markdown("""
     <p>Where:</p>
     """,
-        unsafe_allow_html=False)
+        unsafe_allow_html=True)
 
     # LaTeX with simple text
     st.latex(r"""
@@ -229,7 +229,7 @@ if st.checkbox('Explanation'):
     st.markdown("""
     <p>Here, N is the number of days in the moving average period.</p>
     """,
-        unsafe_allow_html=False)
+        unsafe_allow_html=True)
 
     st.title("Benefits of Using Long and Short Time Window with EMA")
 
