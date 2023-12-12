@@ -50,8 +50,6 @@ This application is designed to assist users in analyzing stock data. Using Stre
     streamlit run stock_analysis_app.py 
     ```
 
-5. **Access the App**: Open your browser and go to `http://localhost:8501`.
-
 ## Acknowledgements
 
 - Data visualization powered by [Plotly](https://plotly.com/).
