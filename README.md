@@ -24,14 +24,14 @@ This application is designed to assist users in analyzing stock data. Using Stre
 ## Requirements
 
 - Python 3.6 or newer.
-- Libraries: `yfinance`, `datetime`, `pandas`, `numpy`, `warnings`, `plotly`, `streamlit`.
+- Libraries: `yfinance`, `datetime`, `pandas`, `numpy`, `plotly`, `streamlit`.
 
 ## Installation & Usage
 
 1. **Clone the Repository**:
     ```bash
-    git clone https://github.com/your-github-username/strategy-helper-for-stock-analysis.git
-    cd strategy-helper-for-stock-analysis
+    git clone https://github.com/your-github-username/Steamlit-Stock-Analytics.git
+    cd Steamlit-Stock-Analytics
     ```
 
 2. **Setup a Virtual Environment (optional but recommended)**:
@@ -42,12 +42,12 @@ This application is designed to assist users in analyzing stock data. Using Stre
 
 3. **Install Required Libraries**:
     ```bash
-    pip install -r requirements.txt  <!-- Assuming you have a requirements.txt file with necessary libraries -->
+    pip install -r requirements.txt
     ```
 
 4. **Run the Streamlit App**:
     ```bash
-    streamlit run your_app_file_name.py  <!-- Replace with your actual app file name if different -->
+    streamlit run stock_analysis_app.py 
     ```
 
 5. **Access the App**: Open your browser and go to `http://localhost:8501`.
